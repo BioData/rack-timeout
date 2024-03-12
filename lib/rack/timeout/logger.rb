@@ -1,10 +1,10 @@
 require "logger"
 require_relative "core"
-require_relative "logging-observer"
+require_relative "logging_observer"
 
 module Rack::Timeout::Logger
   extend self
-  attr :device, :level, :logger
+  attr_reader :device, :level, :logger
 
   def device=(new_device)
     update(new_device, level)

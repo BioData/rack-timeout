@@ -10,7 +10,7 @@ module Rack::Timeout::MonotonicTime
   end
 
   def fsecs_java
-    java.lang.System.nanoTime() / 1_000_000_000.0
+    java.lang.System.nanoTime / 1_000_000_000.0
   end
 
   mutex = Mutex.new
@@ -20,9 +20,9 @@ module Rack::Timeout::MonotonicTime
     mutex.synchronize { last_time = last_time < now ? now : last_time + 1e-6 }
   end
 
-  case
-  when defined? Process::CLOCK_MONOTONIC ; alias fsecs fsecs_mono
-  when RUBY_PLATFORM == "java"           ; alias fsecs fsecs_java
-  else                                   ; alias fsecs fsecs_ruby
+  if defined? Process::CLOCK_MONOTONIC then alias fsecs fsecs_mono
+  elsif RUBY_PLATFORM == "java" then alias fsecs fsecs_java
+  else
+    alias fsecs fsecs_ruby
   end
 end

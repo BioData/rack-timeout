@@ -19,11 +19,11 @@ class RackTimeoutTest < Test::Unit::TestCase
       use Rack::Timeout, **settings
 
       map "/" do
-        run lambda { |env| [200, {'Content-Type' => 'text/plain'}, ['OK']] }
+        run ->(_env) { [200, { 'Content-Type' => 'text/plain' }, ['OK']] }
       end
 
       map "/sleep" do
-        run lambda { |env| sleep }
+        run ->(_env) { sleep }
       end
     end
   end
@@ -41,6 +41,6 @@ class RackTimeoutTest < Test::Unit::TestCase
   end
 
   def time_in_msec(t = Time.now)
-    "#{t.tv_sec}#{t.tv_usec/1000}"
+    "#{t.tv_sec}#{t.tv_usec / 1000}"
   end
 end

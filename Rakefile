@@ -13,4 +13,4 @@ end
 
 task(:build).enhance([:fix_permissions])
 
-task :default => :test
+task default: :test

@@ -2,12 +2,11 @@ require "logger"
 require_relative "core"
 
 class Rack::Timeout::StateChangeLoggingObserver
-  STATE_LOG_LEVEL = { :expired   => :error,
-                      :ready     => :info,
-                      :active    => :debug,
-                      :timed_out => :error,
-                      :completed => :info,
-                    }
+  STATE_LOG_LEVEL = { expired: :error,
+                      ready: :info,
+                      active: :debug,
+                      timed_out: :error,
+                      completed: :info }.freeze
   def initialize
     @logger = nil
   end
@@ -17,14 +16,13 @@ class Rack::Timeout::StateChangeLoggingObserver
     method(:log_state_change)
   end
 
-  SIMPLE_FORMATTER = ->(severity, timestamp, progname, msg) { "#{msg} at=#{severity.downcase}\n" }
+  SIMPLE_FORMATTER = ->(severity, _timestamp, _progname, msg) { "#{msg} at=#{severity.downcase}\n" }
   def self.mk_logger(device, level = ::Logger::INFO)
     ::Logger.new(device).tap do |logger|
       logger.level     = level
       logger.formatter = SIMPLE_FORMATTER
     end
   end
-
 
   attr_writer :logger
 
@@ -49,7 +47,7 @@ class Rack::Timeout::StateChangeLoggingObserver
       s << " timeout=" << info.ms(:timeout) if info.timeout
       s << " service=" << info.ms(:service) if info.service
       s << " term_on_timeout=" << info.term.to_s if info.term
-      s << " state="   << info.state.to_s   if info.state
+      s << " state=" << info.state.to_s if info.state
       s
     end
   end
